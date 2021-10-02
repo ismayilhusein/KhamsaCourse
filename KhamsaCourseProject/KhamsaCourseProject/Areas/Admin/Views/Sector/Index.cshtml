@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<KhamsaCourseProject.Areas.Admin.Models.Sector>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Filiallar";
     Layout = "_AdminLayout";
 }
 
-<h1>Index</h1>
+<h1>Filiallar</h1>
 
 <p>
     <a asp-action="Create">Yeni</a>
@@ -14,16 +14,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Filial
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Phone)
+                Telefon nömrəsi
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fax)
+               Faks
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+               E-Poçt
             </th>
             <th></th>
         </tr>
@@ -44,7 +44,8 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { id=item.Id  }) 
+                @Html.ActionLink("Detallar", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Sil", "Delete", new { id = item.Id })
             </td>
         </tr>
 }

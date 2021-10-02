@@ -19,6 +19,21 @@ namespace KhamsaCourseProject.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.ContractType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContractTypes");
+                });
+
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.PaymentCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -83,6 +98,9 @@ namespace KhamsaCourseProject.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Fullname")
                         .HasColumnType("nvarchar(max)");
 
@@ -138,6 +156,41 @@ namespace KhamsaCourseProject.Migrations
                     b.ToTable("StudentClasses");
                 });
 
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ContractDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ContractTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Debt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractTypeId");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.ToTable("Contracts");
+                });
+
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentGroup", b =>
                 {
                     b.Property<int>("Id")
@@ -162,9 +215,6 @@ namespace KhamsaCourseProject.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Debt")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -233,6 +283,21 @@ namespace KhamsaCourseProject.Migrations
                     b.HasOne("KhamsaCourseProject.Areas.Admin.Models.StudentType", "StudentType")
                         .WithMany("Students")
                         .HasForeignKey("StudentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentContract", b =>
+                {
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.ContractType", "ContractType")
+                        .WithMany("Contracts")
+                        .HasForeignKey("ContractTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Student", "Student")
+                        .WithOne("Contract")
+                        .HasForeignKey("KhamsaCourseProject.Areas.Admin.Models.StudentContract", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

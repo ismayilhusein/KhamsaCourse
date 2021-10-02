@@ -1,0 +1,46 @@
+﻿@model KhamsaCourseProject.Areas.Admin.Dtos.StudentPayDto
+
+@{
+    ViewData["Title"] = "Ödəniş Et";
+}
+
+<h1>Ödəniş Et</h1>
+
+@if (Model.Contract is object)
+{
+    <h4>@Model.Contract.Student.Fullname : Müqavilə dəyəri @Model.Contract.Value AZN</h4>
+}
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="PayContract">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Value" class="control-label">Dəyər (AZN)</label>
+                <input asp-for="Value" class="form-control" />
+                <span asp-validation-for="Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentDate" class="control-label">Ödəmə Tarixi</label>
+                <input asp-for="PaymentDate" value="@DateTime.Now" class="form-control" />
+                <span asp-validation-for="PaymentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Rəy</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Əlavə Et" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Home">Geri</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

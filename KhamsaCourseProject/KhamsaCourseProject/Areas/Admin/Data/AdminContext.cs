@@ -20,6 +20,14 @@ namespace KhamsaCourseProject.Areas.Admin.Data
         public DbSet<StudentPayment> Payments { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<PaymentCategory> PaymentCategories { get; set; }
+        public DbSet<StudentContract> Contracts { get; set; }
+        public DbSet<ContractType> ContractTypes { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Student>()
+            .HasOne(p => p.Contract)
+            .WithOne(b => b.Student).HasForeignKey<StudentContract>(b => b.StudentId); ;
+        }
 
     }
 }

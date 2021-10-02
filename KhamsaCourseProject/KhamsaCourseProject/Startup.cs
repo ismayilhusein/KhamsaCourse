@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation;
 using System.Threading.Tasks;
 
 namespace KhamsaCourseProject
@@ -29,7 +30,7 @@ namespace KhamsaCourseProject
             services.AddControllersWithViews();
             services.AddDbContext<AdminContext>(op1tion => op1tion.UseSqlServer(Configuration.GetConnectionString("IndexContext")));
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc(setup => { }).AddFluentValidation(options =>
+            services.AddMvc().AddFluentValidation(options =>
             {
                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
             });

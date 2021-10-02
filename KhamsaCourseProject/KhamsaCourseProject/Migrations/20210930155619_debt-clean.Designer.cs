@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhamsaCourseProject.Migrations
 {
     [DbContext(typeof(AdminContext))]
-    [Migration("20210928120017_init")]
-    partial class init
+    [Migration("20210930155619_debt-clean")]
+    partial class debtclean
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,51 @@ namespace KhamsaCourseProject.Migrations
                 .HasAnnotation("ProductVersion", "3.1.19")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.ContractType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContractTypes");
+                });
+
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.PaymentCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentCategories");
+                });
+
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.PaymentType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentTypes");
+                });
 
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.Sector", b =>
                 {
@@ -55,6 +100,9 @@ namespace KhamsaCourseProject.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Fullname")
                         .HasColumnType("nvarchar(max)");
 
@@ -70,6 +118,9 @@ namespace KhamsaCourseProject.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("SectorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentClassId")
                         .HasColumnType("int");
 
@@ -80,6 +131,8 @@ namespace KhamsaCourseProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SectorId");
 
                     b.HasIndex("StudentClassId");
 
@@ -105,6 +158,41 @@ namespace KhamsaCourseProject.Migrations
                     b.ToTable("StudentClasses");
                 });
 
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ContractDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ContractTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Debt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractTypeId");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.ToTable("Contracts");
+                });
+
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentGroup", b =>
                 {
                     b.Property<int>("Id")
@@ -127,10 +215,22 @@ namespace KhamsaCourseProject.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StudentId")
+                    b.Property<int>("PaymentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProcessId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Value")
@@ -138,9 +238,13 @@ namespace KhamsaCourseProject.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PaymentTypeId");
+
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentPayments");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentType", b =>
@@ -160,6 +264,12 @@ namespace KhamsaCourseProject.Migrations
 
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.Student", b =>
                 {
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Sector", "Sector")
+                        .WithMany("Students")
+                        .HasForeignKey("SectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("KhamsaCourseProject.Areas.Admin.Models.StudentClass", "StudentClass")
                         .WithMany("Students")
                         .HasForeignKey("StudentClassId")
@@ -179,13 +289,38 @@ namespace KhamsaCourseProject.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentPayment", b =>
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentContract", b =>
                 {
-                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Student", "Student")
-                        .WithMany("StudentPayments")
-                        .HasForeignKey("StudentId")
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.ContractType", "ContractType")
+                        .WithMany("Contracts")
+                        .HasForeignKey("ContractTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Student", "Student")
+                        .WithOne("Contract")
+                        .HasForeignKey("KhamsaCourseProject.Areas.Admin.Models.StudentContract", "StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.StudentPayment", b =>
+                {
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.PaymentCategory", "Category")
+                        .WithMany("Payments")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.PaymentType", "PaymentType")
+                        .WithMany("Payments")
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Student", null)
+                        .WithMany("StudentPayments")
+                        .HasForeignKey("StudentId");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,23 @@
+﻿@model List<PaymentModalDto>
+@{ 
+    Layout = "";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Ödəniş Tarixi</th>
+            <th scope="col">Dəyər</th>
+            <th scope="col">Müqavilə Dəyəri</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.PaymentDate</th>
+                <td>@item.Value</td>
+                <td>@item.ContractValue</td>
+            </tr>
+        }
+    </tbody>
+</table>

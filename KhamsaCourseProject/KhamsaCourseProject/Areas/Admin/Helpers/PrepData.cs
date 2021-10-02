@@ -101,6 +101,16 @@ namespace KhamsaCourseProject.Areas.Admin.Helpers
             {
                 Console.WriteLine($"--> Data already exists context:{nameof(db.PaymentCategories)}");
             }
+            if (!db.ContractTypes.Any())
+            {
+                db.ContractTypes.AddRange(new List<ContractType>() {
+                    new ContractType { Name = "Yeni" }
+                });
+            }
+            else
+            {
+                Console.WriteLine($"--> Data already exists context:{nameof(db.ContractTypes)}");
+            }
             db.SaveChanges();
         }
     }
