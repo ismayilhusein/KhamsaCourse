@@ -4,14 +4,16 @@ using KhamsaCourseProject.Areas.Admin.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KhamsaCourseProject.Migrations
 {
     [DbContext(typeof(AdminContext))]
-    partial class AdminContextModelSnapshot : ModelSnapshot
+    [Migration("20211003173941_sectorId")]
+    partial class sectorId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,9 +288,6 @@ namespace KhamsaCourseProject.Migrations
                     b.Property<int>("ProcessId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SectorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
@@ -300,8 +299,6 @@ namespace KhamsaCourseProject.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("PaymentTypeId");
-
-                    b.HasIndex("SectorId");
 
                     b.HasIndex("StudentId");
 
@@ -394,12 +391,6 @@ namespace KhamsaCourseProject.Migrations
                     b.HasOne("KhamsaCourseProject.Areas.Admin.Models.PaymentType", "PaymentType")
                         .WithMany("Payments")
                         .HasForeignKey("PaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Sector", "Sector")
-                        .WithMany()
-                        .HasForeignKey("SectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

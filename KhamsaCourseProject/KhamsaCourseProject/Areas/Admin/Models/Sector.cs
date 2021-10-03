@@ -15,6 +15,8 @@ namespace KhamsaCourseProject.Areas.Admin.Models
         public string Fax { get; set; }
         public string Email { get; set; }
         public List<Student> Students { get; set; }
+        public List<Exam> Exams { get; set; }
+        public List<Publication> Publications { get; set; }
         public class SectorValidator : AbstractValidator<Sector>
         {
             public SectorValidator()

@@ -4,14 +4,16 @@ using KhamsaCourseProject.Areas.Admin.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KhamsaCourseProject.Migrations
 {
     [DbContext(typeof(AdminContext))]
-    partial class AdminContextModelSnapshot : ModelSnapshot
+    [Migration("20211003163050_exams")]
+    partial class exams
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,12 +55,7 @@ namespace KhamsaCourseProject.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SectorId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SectorId");
 
                     b.ToTable("Exams");
                 });
@@ -91,35 +88,6 @@ namespace KhamsaCourseProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PaymentTypes");
-                });
-
-            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.Publication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Benefit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SectorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SectorId");
-
-                    b.ToTable("Publications");
                 });
 
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.Sector", b =>
@@ -286,9 +254,6 @@ namespace KhamsaCourseProject.Migrations
                     b.Property<int>("ProcessId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SectorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
@@ -300,8 +265,6 @@ namespace KhamsaCourseProject.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("PaymentTypeId");
-
-                    b.HasIndex("SectorId");
 
                     b.HasIndex("StudentId");
 
@@ -321,24 +284,6 @@ namespace KhamsaCourseProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StudentTypes");
-                });
-
-            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.Exam", b =>
-                {
-                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Sector", "Sector")
-                        .WithMany("Exams")
-                        .HasForeignKey("SectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.Publication", b =>
-                {
-                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Sector", "Sector")
-                        .WithMany("Publications")
-                        .HasForeignKey("SectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("KhamsaCourseProject.Areas.Admin.Models.Student", b =>
@@ -394,12 +339,6 @@ namespace KhamsaCourseProject.Migrations
                     b.HasOne("KhamsaCourseProject.Areas.Admin.Models.PaymentType", "PaymentType")
                         .WithMany("Payments")
                         .HasForeignKey("PaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KhamsaCourseProject.Areas.Admin.Models.Sector", "Sector")
-                        .WithMany()
-                        .HasForeignKey("SectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

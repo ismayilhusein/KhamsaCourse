@@ -22,6 +22,8 @@ namespace KhamsaCourseProject.Areas.Admin.Data
         public DbSet<PaymentCategory> PaymentCategories { get; set; }
         public DbSet<StudentContract> Contracts { get; set; }
         public DbSet<ContractType> ContractTypes { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<Publication> Publications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>()

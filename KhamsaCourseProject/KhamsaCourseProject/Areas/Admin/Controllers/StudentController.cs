@@ -231,6 +231,8 @@ namespace KhamsaCourseProject.Areas.Admin.Controllers
 
             studentPayment.ProcessId = id;
 
+            studentPayment.SectorId = student.SectorId;
+
             #endregion
 
             _db.Payments.Add(studentPayment);

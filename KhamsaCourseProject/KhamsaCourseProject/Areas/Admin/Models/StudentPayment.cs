@@ -13,6 +13,8 @@ namespace KhamsaCourseProject.Areas.Admin.Models
         public PaymentType PaymentType { get; set; }
         public int CategoryId { get; set; }
         public PaymentCategory Category { get; set; }
+        public int SectorId { get; set; }
+        public Sector Sector { get; set; }
         public string Description { get; set; }
 
         public class StudentPaymentValidator : AbstractValidator<StudentPayment>
