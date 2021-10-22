@@ -69,7 +69,7 @@ namespace KhamsaCourseProject.Areas.Admin.Helpers
             }
             if (!db.Sectors.Any())
             {
-                db.Sectors.Add(new Sector { Name = "Xırdalan", IsActive = 1, Email = "TestEmail", Fax= "TestFax", Phone = "TestPhone" });
+                db.Sectors.Add(new Sector { Name = "Xırdalan", IsActive = 1, Email = "TestEmail", Fax = "TestFax", Phone = "TestPhone" });
             }
             else
             {
@@ -90,10 +90,15 @@ namespace KhamsaCourseProject.Areas.Admin.Helpers
             {
                 db.PaymentCategories.AddRange(new List<PaymentCategory>() {
                     new PaymentCategory { Name = "Tələbədən Gəlir" },
-                     new PaymentCategory { Name = "İmtahandan Gəlir" },
+                    new PaymentCategory { Name = "İmtahandan Gəlir" },
                     new PaymentCategory { Name = "Nəşriyyatdan Gəlir" },
-                     new PaymentCategory { Name = "Əlavə Gəlir" },
-                      new PaymentCategory { Name = "Əlavə Xərc" },
+                    new PaymentCategory { Name = "Əlavə Gəlir" },
+                    new PaymentCategory { Name = "Əlavə Xərc" },
+                    new PaymentCategory { Name = "Ofis Xərc" },
+                    new PaymentCategory { Name = "Pul Çıxışı" },
+                    new PaymentCategory { Name = "İşci Çıxışı" },
+                    new PaymentCategory { Name = "İşci Alışı" },
+                    new PaymentCategory { Name = "Maaş" },
                     new PaymentCategory { Name = "Digər" }
                 });
             }
@@ -110,6 +115,70 @@ namespace KhamsaCourseProject.Areas.Admin.Helpers
             else
             {
                 Console.WriteLine($"--> Data already exists context:{nameof(db.ContractTypes)}");
+            }
+            if (!db.Activities.Any())
+            {
+                db.Activities.AddRange(new List<Activity>() {
+                    new Activity { Name = "Filial Silmə" },
+                    new Activity { Name = "İstifadəçi Siyahısı"},
+                    new Activity { Name = "İstifadəçi Qeydiyyatı"},
+                    new Activity { Name = "Hesabatlar"}
+                });
+            }
+            else
+            {
+                Console.WriteLine($"--> Data already exists context:{nameof(db.ContractTypes)}");
+            }
+            if (!db.EmployeeTypes.Any())
+            {
+                db.EmployeeTypes.AddRange(new List<EmployeeType>() {
+                    new EmployeeType { Name = "Ofis İşcisi" },
+                    new EmployeeType { Name = "Müəllim"}
+                });
+            }
+            else
+            {
+                Console.WriteLine($"--> Data already exists context:{nameof(db.ContractTypes)}");
+            }
+            if (!db.Users.Any())
+            {
+                List<Activity> activities = db.Activities.ToList();
+                List<Sector> sectors = db.Sectors.ToList();
+                List<Role> roles = new List<Role>();
+                User user = new User
+                {
+                    Email = "orxan.hamidov.orxan.hamidov@mail.ru",
+                    MobileNumber = "(050) 630 - 8522",
+                    Name = "Orxan",
+                    Surname = "Hamidov",
+                    Password = CryptoHelper.Crypto.HashPassword("adminaz12345"),
+                    Permission = "Admin",
+                    Username = "orxan.admin"
+                };
+                db.Users.Add(user);
+                db.SaveChanges();
+                if (activities.Count > 0)
+                {
+                    foreach (var item in activities)
+                    {
+                        roles.Add(new Role { ActivityId = item.Id, TypeId = 2, UserId = user.Id });
+                    }
+                }
+                if (sectors.Count > 0)
+                {
+                    foreach (var item in sectors)
+                    {
+                        roles.Add(new Role { ActivityId = item.Id, TypeId = 1, UserId = user.Id });
+                    }
+                }
+                if (roles.Count > 0)
+                {
+                    db.Roles.AddRange(roles);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"--> Data already exists context:{nameof(db.Users)}");
             }
             db.SaveChanges();
         }

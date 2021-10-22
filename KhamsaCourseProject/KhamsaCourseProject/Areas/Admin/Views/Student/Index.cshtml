@@ -15,7 +15,34 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body content-payment">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input type="text" value="" name="daterange" class="form-control" />
+                                    </div>
+                                    <div class="col-2">
+                                        <a href="#" data-url-payment="" class="btn btn-primary search-payment">Axtar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ödəniş Tarixi</th>
+                            <th scope="col">Dəyər</th>
+                            <th scope="col">Müqavilə Dəyəri</th>
+                        </tr>
+                    </thead>
+                    <tbody class="content-payment">
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
@@ -271,8 +298,11 @@
         </li>
     </ul>
 </nav>
-@section Scripts{
+@section Scripts{z
     <script>
+        $('input[name="daterange"]').daterangepicker({
+            opens: 'right'
+        });
         $('.table-student').DataTable({
             "lengthChange": false,
             "paging": false,
@@ -299,13 +329,48 @@
 
             }
         });
+        var url = "";
         $(".get-details").click(function (e) {
             e.preventDefault();
-            const url = $(this).attr('data-url');
+            url = $(this).attr('data-url');
             $.get(url, function (data) {
                 $('.content-payment').empty();
                 $('#paymentModal').modal('show');
-                $('.content-payment').append(data);
+                console.log(data)
+                var str = [];
+
+                for (var i = 0; i < data.payments.length; i++) {
+                    var ltr = `<tr>
+                                          <th scope="row">${data.payments[i].paymentDate}</th>
+                                          <td>${data.payments[i].value} AZN</td>
+                                          <td>${data.payments[i].contractValue} AZN</td>`;
+
+                    ltr += `</tr>`;
+                    str.push(ltr);
+                }
+                $('.content-payment').append(str);
+                $('input[name="daterange"]').val(data.datefrom + " - " + data.dateto)
+            })
+        })
+        $('.search-payment').click(function (e) {
+            var daterange = $('input[name="daterange"]').val();
+            $.get(url + "?daterange=" + daterange, function (data) {
+                $('.content-payment').empty();
+                $('#paymentModal').modal('show');
+                console.log(data)
+                var str = [];
+
+                for (var i = 0; i < data.payments.length; i++) {
+                    var ltr = `<tr>
+                                          <th scope="row">${data.payments[i].paymentDate}</th>
+                                          <td>${data.payments[i].value} AZN</td>
+                                          <td>${data.payments[i].contractValue} AZN</td>`;
+
+                    ltr += `</tr>`;
+                    str.push(ltr);
+                }
+                $('.content-payment').append(str);
+                $('input[name="daterange"]').val(data.datefrom + " - " + data.dateto)
             })
         })
     </script>

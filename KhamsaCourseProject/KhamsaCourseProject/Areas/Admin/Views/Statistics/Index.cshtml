@@ -1,0 +1,117 @@
+﻿@model KhamsaCourseProject.Areas.Admin.Dtos.StatisticsIndexDto
+
+@{
+    ViewData["Title"] = "Statistikalar";
+    Layout = "_AdminLayout";
+}
+<h1>Statistikalar</h1>
+<h5>@ViewData["DateFrom"] və @ViewData["DateTo"] aralığındakı göstəricilərin siyahısı</h5>
+<form asp-action="Index" asp-controller="Statistics" asp-area="Admin" method="get">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <select name="id" class="form-control">
+                                <option value="">Hamısı</option>
+                                @foreach (var item in Model.Sectors)
+                                {
+                                    int value = 0;
+                                    if (ViewContext.HttpContext.Request.Query["id"] != string.Empty)
+                                    {
+                                        value = Convert.ToInt32(ViewContext.HttpContext.Request.Query["id"]);
+                                    }
+                                    if (item.Id == value)
+                                    {
+                                        <option selected value=@item.Id>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@item.Id>@item.Name</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" value="@ViewData["DateFrom"] - @ViewData["DateTo"]" name="daterange" class="form-control" />
+                        </div>
+                        <div class="col-2">
+                            <select name="categoryId" class="form-control">
+                                <option value="">Hamısı</option>
+                                @foreach (var item in Model.Categories)
+                                {
+                                    int value = 0;
+                                    if (ViewContext.HttpContext.Request.Query["categoryId"] != string.Empty)
+                                    {
+                                        value = Convert.ToInt32(ViewContext.HttpContext.Request.Query["categoryId"]);
+                                    }
+                                    if (item.Id == value)
+                                    {
+                                        <option selected value=@item.Id>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@item.Id>@item.Name</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-primary">Axtar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Filial Adı
+            </th>
+            <th>
+                Ümumi Gəlir
+            </th>
+            <th>
+                Ümumi Xərc
+            </th>
+            <th>
+                Xərc Tipi
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Statistcs)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Benefit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+    $('input[name="daterange"]').daterangepicker({
+        opens: 'right'
+    }, function (start, end, label) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+    </script>
+}

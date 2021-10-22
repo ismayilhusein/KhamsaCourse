@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using KhamsaCourseProject.Areas.Admin.Filters;
 namespace KhamsaCourseProject.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [TypeFilter(typeof(IncludeRoles))]
     public class PublicationController : Controller
     {
         private readonly AdminContext _db;
@@ -48,7 +49,7 @@ namespace KhamsaCourseProject.Areas.Admin.Controllers
             _db.SaveChanges();
             _db.Payments.Add(new StudentPayment
             {
-                CategoryId = 3,
+                CategoryId = 8,
                 Description = exam.Description,
                 PaymentDate = exam.PublicationDate,
                 PaymentTypeId = 2,
@@ -58,6 +59,42 @@ namespace KhamsaCourseProject.Areas.Admin.Controllers
             });
             _db.SaveChanges();
             return RedirectToAction("Index", new { Id = id });
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Publication debt = new Publication();
+            if (debt is object)
+            {
+                debt = _db.Publications.Where(a => a.Id == id).FirstOrDefault();
+            }
+            return View(debt);
+        }
+        [HttpPost]
+        public IActionResult Edit(Publication request, int id)
+        {
+            Publication debt = _db.Publications.Where(a => a.Id == id).FirstOrDefault();
+            if (debt is object)
+            {
+                debt.Name = request.Name;
+                debt.Benefit= request.Benefit;
+                debt.PublicationDate = request.PublicationDate;
+                debt.Description = request.Description;
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Index", new { Id = debt.
+                SectorId });
+        }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            Publication debt = _db.Publications.Where(a => a.Id == id).FirstOrDefault();
+            if (debt is object)
+            {
+                _db.Publications.Remove(debt);
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Index", new { Id = debt.SectorId });
         }
     }
 }

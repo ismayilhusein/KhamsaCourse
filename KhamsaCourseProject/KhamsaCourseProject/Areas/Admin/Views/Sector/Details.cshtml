@@ -15,7 +15,7 @@
     }
     a{
         text-decoration:none !important;
-
+        width:100%;
     }
 </style>
 
@@ -101,7 +101,7 @@
                     </a>
                 </div>
                 <div class="col-3">
-                    <a asp-action="Benefit" asp-controller="ExtraPayments" asp-area="Admin" asp-route-id="@Model.Id">
+                    <a asp-action="Index" asp-controller="ExtraPayment" asp-area="Admin" asp-route-id="@Model.Id">
                         <div class="card shadow-sm selected-details">
                             <div class="card-body center-picture">
                                 <img class="ml-auto mr-auto" width="100" height="100" src="~/admin/img/approve.png" />
@@ -113,7 +113,7 @@
                     </a>
                 </div>
                 <div class="col-3">
-                    <a asp-action="UnBenefit" asp-controller="ExtraPayments" asp-area="Admin" asp-route-id="@Model.Id">
+                    <a asp-action="Index" asp-controller="ExtraDebt" asp-area="Admin" asp-route-id="@Model.Id">
                         <div class="card shadow-sm selected-details">
                             <div class="card-body center-picture">
                                 <img class="ml-auto mr-auto" width="100" height="100" src="~/admin/img/minus4.png" />

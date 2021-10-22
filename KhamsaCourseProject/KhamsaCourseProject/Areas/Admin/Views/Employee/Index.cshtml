@@ -1,0 +1,338 @@
+﻿@model EmployeeIndexDto
+
+@{
+    ViewData["Title"] = "İşcilər";
+    Layout = "_AdminLayout";
+}
+
+<!-- Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Ödəniş Tarixi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input type="text" value="" name="daterange" class="form-control" />
+                                    </div>
+                                    <div class="col-2">
+                                        <a href="#" data-url-payment="" class="btn btn-primary search-payment">Axtar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ödəniş Tarixi</th>
+                            <th scope="col">Dəyər</th>
+                            <th scope="col">Müqavilə Dəyəri</th>
+                            <th scope="col">Tipi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="content-payment">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1>İşcilər</h1>
+
+<p>
+    <a asp-action="Create">Yeni İşci</a>
+</p>
+<form asp-action="Index" asp-controller="Employee" asp-area="Admin" method="get">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <select name="EmployeeTypes" class="form-control">
+                                <option value="">İşci Tipi</option>
+                                @foreach (var item in Model.EmployeeTypes)
+                                {
+                                    int value = 0;
+                                    if (ViewContext.HttpContext.Request.Query["EmployeeTypes"] != string.Empty)
+                                    {
+                                        value = Convert.ToInt32(ViewContext.HttpContext.Request.Query["EmployeeTypes"]);
+                                    }
+
+                                    if (item.Id == value)
+                                    {
+                                        <option selected value=@item.Id>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@item.Id>@item.Name</option>
+                                    }
+
+                                }
+
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <select name="Status" class="form-control">
+                                <option value="">Status</option>
+                                @{ int vl = 0;}
+                                @if (ViewContext.HttpContext.Request.Query["Status"] != string.Empty)
+                                {
+                                    vl = Convert.ToInt32(ViewContext.HttpContext.Request.Query["Status"]);
+                                }
+                                @if (vl == 0)
+                                {
+                                    <option selected value=0>Aktiv</option>
+                                    <option value=1>Deaktiv</option>
+                                }
+                                else
+                                {
+                                    <option value=0>Aktiv</option>
+                                    <option selected value=1>Deaktiv</option>
+                                }
+
+
+
+
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" name="Fullname" value="@ViewContext.HttpContext.Request.Query["Fullname"]" placeholder="Ad, Soyad" class="form-control" />
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-primary">Axtar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="table table-student">
+    <thead>
+        <tr>
+            <th>
+                Sıra nömrəsi
+            </th>
+            <th>
+                Adı, Soyadı
+            </th>
+            <th>
+                Tipi
+            </th>
+            <th>
+                Ev Telefonu
+            </th>
+            <th>
+                Mobil Telefonu
+            </th>
+            <th>
+                Qeydiyyat Tarixi
+            </th>
+            <th>
+                Filial @*@DateTime.Now.ToString("dddd", new System.Globalization.CultureInfo("az-Latn-AZ"))*@
+            </th>
+            <th>
+                Müqavilə Dəyəri
+            </th>
+            <th>
+                Ümumi Borc
+            </th>
+            <th>
+                Prosesslər
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Employees is object)
+        {
+            @foreach (var item in Model.Employees)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fullname)
+                    </td>
+                    <td>
+                        @item.EmployeeType.Name
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MobileNumber)
+                    </td>
+                    <td>
+                        @item.RegistrationDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @item.Sector.Name
+                    </td>
+                    @if (item.EmployeeContract is object)
+                    {
+                        <td>@item.EmployeeContract.Value</td>
+
+                    }
+                    else
+                    {
+                        <td>Yoxdur</td>
+                    }
+                    @if (item.EmployeeContract is object)
+                    {
+                        <td>@item.EmployeeContract.Debt</td>
+                    }
+                    else
+                    {
+                        <td>Yoxdur</td>
+                    }
+                    @if (item.IsActive == 1)
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id">Düzəliş</a> |
+                            <a href="#" data-url="@Url.Action("Details","Employee",new { id = item.Id })" class="get-details">Detallar</a> |
+                            @Html.ActionLink("Sil", "Delete", new { id = item.Id }) |
+                            @Html.ActionLink("Ödəniş", "PayContract", new { id = item.Id }) |
+                            @Html.ActionLink("Alacaq", "CostContract", new { id = item.Id }) |
+                            <a asp-action="Deactivate" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id">Arxivlə</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a asp-action="Activate" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id">Aktivləşdir</a>
+                        </td>
+
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>
+<input type="hidden" class="search-payment" />
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="page-item @(Model.Pagination.Page == 0 ? "disabled": "")">
+            <a class="page-link" asp-route-page=0 tabindex="-1">İlk səhifə</a>
+        </li>
+        @for (int i = Model.Pagination.StartPage; i <= Model.Pagination.EndPage; i++)
+        {
+            <li class="page-item @(Model.Pagination.Page == i ? "active": "")">
+                <a class="page-link" asp-action="Index" asp-controller="Student" asp-area="Admin" asp-route-page=@i>@(i + 1)<span class="sr-only">(current)</span></a>
+            </li>
+        }
+        <li class="page-item  @(Model.Pagination.Page == Model.Pagination.PageCount - 1 ? "disabled": "")">
+            <a class="page-link" asp-action="Index" asp-controller="Student" asp-area="Admin" asp-route-page=@(Model.Pagination.PageCount-1)>Son səhifə</a>
+        </li>
+    </ul>
+</nav>
+@section Scripts{
+    <script>
+        $('input[name="daterange"]').daterangepicker({
+            opens: 'right'
+        });
+        $('.table-student').DataTable({
+            "lengthChange": false,
+            "paging": false,
+            "lengthMenu": false,
+            "info": false,
+            "pageLength": false,
+            "searching": false,
+            "language": {
+                "emptyTable": "Məlumat Yoxdur",
+                "infoEmpty": "",
+                "search": "Axtar"
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ],
+            initComplete: function () {
+                var btns = $('.dt-button');
+                btns.addClass('btn btn-success btn-sm mt-1');
+                btns.removeClass('dt-button');
+
+            }
+        });
+
+        var url = "";
+        $(".get-details").click(function (e) {
+            e.preventDefault();
+            url = $(this).attr('data-url');
+            $.get(url, function (data) {
+                $('.content-payment').empty();
+                $('#paymentModal').modal('show');
+                console.log(data)
+                var str = [];
+
+                for (var i = 0; i < data.payments.length; i++) {
+                    var ltr = `<tr>
+                                          <th scope="row">${data.payments[i].paymentDate}</th>
+                                          <td>${data.payments[i].value} AZN</td>
+                                          <td>${data.payments[i].contractValue} AZN</td>`;
+
+                    if (data.payments[i].paymentType == 1) {
+                        ltr += `<td>Veriləcək</td>`;
+                    }
+                    else {
+                        ltr += `<td>Alacaq</td>`;
+                    }
+
+                    ltr += `</tr>`;
+                    str.push(ltr);
+                }
+                $('.content-payment').append(str);
+                $('input[name="daterange"]').val(data.datefrom + " - " + data.dateto)
+            })
+        })
+        $('.search-payment').click(function (e) {
+            var daterange = $('input[name="daterange"]').val();
+            $.get(url + "?daterange=" + daterange, function (data) {
+                $('.content-payment').empty();
+                $('#paymentModal').modal('show');
+                console.log(data)
+                var str = [];
+
+                for (var i = 0; i < data.payments.length; i++) {
+                    var ltr = `<tr>
+                                          <th scope="row">${data.payments[i].paymentDate}</th>
+                                          <td>${data.payments[i].value} AZN</td>
+                                          <td>${data.payments[i].contractValue} AZN</td>`;
+
+                    if (data.payments[i].paymentType == 1) {
+                        ltr += `<td>Veriləcək</td>`;
+                    }
+                    else {
+                        ltr += `<td>Alacaq</td>`;
+                    }
+
+                    ltr += `</tr>`;
+                    str.push(ltr);
+                }
+                $('.content-payment').append(str);
+                $('input[name="daterange"]').val(data.datefrom + " - " + data.dateto)
+            })
+        })
+    </script>
+}

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<KhamsaCourseProject.Areas.Admin.Models.User>
+
+@{
+    ViewData["Title"] = "İstifadəçi Siyahısı";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>İstifadəçi Siyahısı</h1>
+
+<p>
+    <a asp-action="Create">Qeydiyyat</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                İstifadəçi adı
+            </th>
+            <th>
+                Ad
+            </th>
+            <th>
+                Soyad
+            </th>
+            <th>
+                Vəzifə
+            </th>
+            <th>
+                Əlaqə nömrəsi
+            </th>
+            <th>
+                Email
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.Username != "orxan.admin")
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Surname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Permission)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MobileNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Sil", "Delete", new { id = item.Id }) |
+                        @Html.ActionLink("Vəzifələr", "Roles", new { id = item.Id })
+                    </td>
+                </tr>
+
+            }
+
+        }
+    </tbody>
+</table>

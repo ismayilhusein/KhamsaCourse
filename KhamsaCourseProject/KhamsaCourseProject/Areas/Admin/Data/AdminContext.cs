@@ -24,11 +24,25 @@ namespace KhamsaCourseProject.Areas.Admin.Data
         public DbSet<ContractType> ContractTypes { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Publication> Publications { get; set; }
+        public DbSet<Office> Offices { get; set; }
+        public DbSet<Debt> Debts { get; set; }
+        public DbSet<ExtraDebt> ExtraDebts { get; set; }
+        public DbSet<ExtraPayment> ExtraPayments { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeType> EmployeeTypes { get; set; }
+        public DbSet<EmployeeContract> EmployeeContracts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>()
             .HasOne(p => p.Contract)
-            .WithOne(b => b.Student).HasForeignKey<StudentContract>(b => b.StudentId); ;
+            .WithOne(b => b.Student).HasForeignKey<StudentContract>(b => b.StudentId);
+
+            modelBuilder.Entity<Employee>()
+           .HasOne(p => p.EmployeeContract)
+           .WithOne(b => b.Employee).HasForeignKey<EmployeeContract>(b => b.EmployeeId);
         }
 
     }

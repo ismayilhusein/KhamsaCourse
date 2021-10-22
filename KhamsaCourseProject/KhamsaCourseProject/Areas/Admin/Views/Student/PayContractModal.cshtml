@@ -2,6 +2,24 @@
 @{ 
     Layout = "";
 }
+<form asp-action="Details" asp-controller="Employee" asp-area="Admin" method="get">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <input type="text" value="@ViewData["DateFrom"] - @ViewData["DateTo"]" name="daterange" class="form-control" />
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-primary">Axtar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>

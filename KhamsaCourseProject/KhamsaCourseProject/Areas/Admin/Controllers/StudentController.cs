@@ -9,10 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KhamsaCourseProject.Areas.Admin.Filters;
 
 namespace KhamsaCourseProject.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [TypeFilter(typeof(IncludeRoles))]
     public class StudentController : Controller
     {
         private readonly AdminContext _db;
@@ -175,18 +177,35 @@ namespace KhamsaCourseProject.Areas.Admin.Controllers
 
             return RedirectToAction("Index", new { id = student.SectorId });
         }
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, [FromQuery] string daterange)
         {
             StudentContract contract = _db.Contracts.Where(a => a.StudentId == id).FirstOrDefault();
 
-            object payments = _db.Payments.Where(a => a.ProcessId == id && a.PaymentTypeId == 2 && a.CategoryId == 5).ToList().Select(a => new PaymentModalDto
+            var dateFrom = DateTime.Now.AddDays(-1);
+            var dateTo = DateTime.Now.AddDays(1);
+
+            if (!string.IsNullOrEmpty(daterange))
+            {
+                string[] dateFull = daterange.Split("-");
+                dateFrom = Convert.ToDateTime(dateFull[0]);
+                dateTo = Convert.ToDateTime(dateFull[1]);
+            }
+
+            object payments = _db.Payments.Where(a => a.ProcessId == id && a.CategoryId == 10 && a.PaymentDate >= dateFrom && a.PaymentDate <= dateTo
+            ).ToList().Select(a => new PaymentModalDto
             {
                 PaymentDate = a.PaymentDate.ToString("yyyy-MMM-dd HH:mm"),
                 Value = a.Value,
                 ContractValue = contract.Value
             }).ToList();
 
-            return View("PayContractModal", payments);
+            return Json(new
+            {
+                payments = payments,
+                datefrom = dateFrom.ToString("MM/dd/yyyy"),
+                dateto = dateTo.ToString("MM/dd/yyyy"),
+                id = id
+            });
 
         }
         [HttpGet]
@@ -225,7 +244,7 @@ namespace KhamsaCourseProject.Areas.Admin.Controllers
 
             StudentPayment studentPayment = payment.Adapt<StudentPayment>();
 
-            studentPayment.CategoryId = 5;
+            studentPayment.CategoryId = 10;
 
             studentPayment.PaymentTypeId = 2;
 

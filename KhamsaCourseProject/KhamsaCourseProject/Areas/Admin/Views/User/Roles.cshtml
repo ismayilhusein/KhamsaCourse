@@ -1,0 +1,64 @@
+﻿@model RolesIndexDto
+@{
+    ViewData["Title"] = "Vəzifələr";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/admin/css/checkbox.css" />
+<form asp-action="Roles" asp-controller="User" asp-route-id="@Model.User.Id" method="post">
+    <div class="card">
+        <div class="card-header">
+            <h3>Vəzifələr : @Model.User.Username</h3>
+        </div>
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <h5>Filiallar</h5>
+                        @foreach (var item in Model.UserSectors)
+                        {
+                            <div class="card m-3">
+                                <div class="card-body">
+                                    <div class="form-group row justify-content-between">
+                                        <h4 class="control-label col-6">@item.Name</h4>
+                                        <div class="col-6 text-right">
+                                            <label class="switch">
+                                                <input value="@item.Id" name="Sectors" type="checkbox" @(Model.UserRoles.Any(a => a.TypeId == 1 && a.ActivityId == item.Id) ? "checked" : "")>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3">
+                <div class="col-6">
+                    <h5>Vəzifələr</h5>
+                    @foreach (var item in Model.UserActivities)
+                    {
+                        <div class="card m-3">
+                            <div class="card-body">
+                                <div class="form-group row justify-content-between">
+                                    <h4 class="control-label col-6">@item.Name</h4>
+                                    <div class="col-6 text-right">
+                                        <label class="switch">
+                                            <input value="@item.Id" name="Activities" type="checkbox" @(Model.UserRoles.Any(a => a.TypeId == 2 && a.ActivityId == item.Id) ? "checked" : "")>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Index" class="btn btn-danger">Geri</a>
+            <button class="btn btn-primary" type="submit">Yadda Saxla</button>
+        </div>
+    </div>
+</form>

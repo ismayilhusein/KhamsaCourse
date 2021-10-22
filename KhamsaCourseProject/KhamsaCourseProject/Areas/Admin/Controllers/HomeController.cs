@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using KhamsaCourseProject.Areas.Admin.Filters;
 namespace KhamsaCourseProject.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [TypeFilter(typeof(IncludeRoles))]
     public class HomeController : Controller
     {
 
@@ -14,5 +15,6 @@ namespace KhamsaCourseProject.Areas.Admin.Controllers
         {
             return View();
         }
+
     }
 }

@@ -5,49 +5,95 @@
     Layout = "_AdminLayout";
 }
 
-<h1>Filiallar</h1>
 
-<p>
-    <a asp-action="Create">Yeni</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Filial
-            </th>
-            <th>
-                Telefon nömrəsi
-            </th>
-            <th>
-               Faks
-            </th>
-            <th>
-               E-Poçt
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Detallar", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Sil", "Delete", new { id = item.Id })
-            </td>
-        </tr>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="delete-sector-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xəbərdarlıq</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Seçilmiş Filialı silmək istədiyinizdən əminsiniz ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Geri</button>
+                <a href="#" id="delete-data" class="btn btn-primary">Davam et</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header" style="display:flex;justify-content:space-between;">
+        <h1>Filiallar</h1>
+        <p>
+            <a asp-action="Create" class="btn btn-primary mt-2">Yeni</a>
+        </p>
+    </div>
+    <div class="card-body">
+        <table class="table table-responsive-lg">
+            <thead>
+                <tr>
+                    <th>
+                        Filial
+                    </th>
+                    <th>
+                        Telefon nömrəsi
+                    </th>
+                    <th>
+                        Faks
+                    </th>
+                    <th>
+                        E-Poçt
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fax)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+
+                            <a asp-controller="Sector" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detallar</a>
+                            <a asp-controller="Sector" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger delete-sector">Silmək</a>
+
+                            @*@Html.ActionLink("Detallar", "Details", new { id = item.Id })*@
+                            @*@Html.ActionLink("Sil", "Delete", new { id = item.Id })*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $('.delete-sector').click(function (e) {
+            e.preventDefault();
+            var hrefValue = $(this).attr('href');
+            $('#delete-data').prop('href', hrefValue);
+            $('#delete-sector-modal').modal('show');
+        })
+       
+    </script>
 }
-    </tbody>
-</table>

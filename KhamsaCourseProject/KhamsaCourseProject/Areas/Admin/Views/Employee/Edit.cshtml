@@ -1,0 +1,145 @@
+﻿@model EmployeeCreateDto
+
+@{
+    ViewData["Title"] = "İşci Düzəliş";
+}
+
+<h1>Düzəliş</h1>
+
+<h4>İşci</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Fullname" class="control-label">Ad, Soyad</label>
+                <input asp-for="Fullname" placeholder="Ad, Soyad" class="form-control" />
+                <span asp-validation-for="Fullname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeTypeId" class="control-label">Tələbə Tipi</label>
+                <select asp-for="EmployeeTypeId" class="form-control">
+                    @foreach (var item in Model.EmployeeTypes)
+                    {
+                        <option value=@item.Id>@item.Name</option>
+                    }
+
+                </select>
+                <span asp-validation-for="EmployeeTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label">Ev nömrəsi</label>
+                <input id="homeNumber" placeholder="(XXX) XXX-XXXX" maxlength="16" asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MobileNumber" class="control-label">Mobil nömrə</label>
+                <input id="phoneNumber" placeholder="(XXX) XXX-XXXX" maxlength="16" asp-for="MobileNumber" class="form-control" />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegistrationDate" class="control-label">Qeydiyyat Tarixi</label>
+                <input asp-for="RegistrationDate" class="form-control" />
+                <span asp-validation-for="RegistrationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SectorId" class="control-label">Filial</label>
+                <select asp-for="SectorId" class="form-control">
+                    @foreach (var item in Model.Sectors)
+                    {
+                        <option value=@item.Id>@item.Name</option>
+                    }
+
+                </select>
+                <span asp-validation-for="SectorId" class="text-danger"></span>
+            </div>
+            <div class="row mt-5 justify-content-center">
+                <div class="col-md-12">
+                    <h4>Müqavilə</h4>
+                    <hr />
+                    <div class="form-group">
+                        <label asp-for="ContractType" class="control-label">Əməliyyat</label>
+                        <select asp-for="ContractType" class="form-control">
+                            @foreach (var item in Model.ContractTypes)
+                            {
+                                <option value=@item.Id>@item.Name</option>
+                            }
+
+                        </select>
+                        <span asp-validation-for="ContractType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ContractDate" class="control-label">Müqavilə Tarixi</label>
+                        <input asp-for="ContractDate" class="form-control" />
+                        <span asp-validation-for="ContractDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Value" class="control-label">Ödəmə Miqdarı</label>
+                        <input asp-for="Value" class="form-control" />
+                        <span asp-validation-for="Value" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Yadda Saxla" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary">Geri</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        const isNumericInput = (event) => {
+            const key = event.keyCode;
+            return ((key >= 48 && key <= 57) || // Allow number line
+                (key >= 96 && key <= 105) // Allow number pad
+            );
+        };
+
+        const isModifierKey = (event) => {
+            const key = event.keyCode;
+            return (event.shiftKey === true || key === 35 || key === 36) || // Allow Shift, Home, End
+                (key === 8 || key === 9 || key === 13 || key === 46) || // Allow Backspace, Tab, Enter, Delete
+                (key > 36 && key < 41) || // Allow left, up, right, down
+                (
+                    // Allow Ctrl/Command + A,C,V,X,Z
+                    (event.ctrlKey === true || event.metaKey === true) &&
+                    (key === 65 || key === 67 || key === 86 || key === 88 || key === 90)
+                )
+        };
+
+        const enforceFormat = (event) => {
+            // Input must be of a valid number format or a modifier key, and not longer than ten digits
+            if (!isNumericInput(event) && !isModifierKey(event)) {
+                event.preventDefault();
+            }
+        };
+
+        const formatToPhone = (event) => {
+            if (isModifierKey(event)) { return; }
+
+            const input = event.target.value.replace(/\D/g, '').substring(0, 10); // First ten digits of input only
+            const areaCode = input.substring(0, 3);
+            const middle = input.substring(3, 6);
+            const last = input.substring(6, 10);
+
+            if (input.length > 6) { event.target.value = `(${areaCode}) ${middle} - ${last}`; }
+            else if (input.length > 3) { event.target.value = `(${areaCode}) ${middle}`; }
+            else if (input.length > 0) { event.target.value = `(${areaCode}`; }
+        };
+
+        const inputElement = document.getElementById('phoneNumber');
+        inputElement.addEventListener('keydown', enforceFormat);
+        inputElement.addEventListener('keyup', formatToPhone);
+        const inputHomeElement = document.getElementById('homeNumber');
+        inputHomeElement.addEventListener('keydown', enforceFormat);
+        inputHomeElement.addEventListener('keyup', formatToPhone);
+    </script>
+}

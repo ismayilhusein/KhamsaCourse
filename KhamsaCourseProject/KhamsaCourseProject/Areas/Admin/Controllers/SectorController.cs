@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KhamsaCourseProject.Areas.Admin.Models;
+using KhamsaCourseProject.Areas.Admin.Filters;
 
 namespace KhamsaCourseProject.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [TypeFilter(typeof(IncludeRoles))]
     public class SectorController : Controller
     {
         private readonly AdminContext _context;
