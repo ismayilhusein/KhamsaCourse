@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -21,3 +21,5 @@ jobs:
       run: dotnet build --project KhamsaCourseProject/KhamsaCourseProject/KhamsaCourseProject.csproj --no-restore 
     - name: Test
       run: dotnet test --project KhamsaCourseProject/KhamsaCourseProject/KhamsaCourseProject.csproj --no-build --verbosity normal
+    - name: Publish
+      run: dotnet publish KhamsaCourseProject/KhamsaCourseProject -c Release
