@@ -15,11 +15,5 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
-    - name: Restore dependencies
-      run: dotnet restore --project KhamsaCourseProject/KhamsaCourseProject/KhamsaCourseProject.csproj
-    - name: Build
-      run: dotnet build --project KhamsaCourseProject/KhamsaCourseProject/KhamsaCourseProject.csproj --no-restore 
-    - name: Test
-      run: dotnet test --project KhamsaCourseProject/KhamsaCourseProject/KhamsaCourseProject.csproj --no-build --verbosity normal
     - name: Publish
       run: dotnet publish KhamsaCourseProject/KhamsaCourseProject -c Release
