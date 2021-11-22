@@ -4,9 +4,7 @@
     ViewData["Title"] = "Yeni Tələbə";
 }
 
-<h1>Yeni</h1>
-
-<h4>Tələbə</h4>
+<h1>Yeni tələbə</h1>
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-8">
@@ -62,7 +60,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="RegistrationDate" class="control-label">Qeydiyyat Tarixi</label>
-                <input asp-for="RegistrationDate" class="form-control" />
+                <input type="date" asp-for="RegistrationDate" class="form-control" />
                 <span asp-validation-for="RegistrationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -91,11 +89,7 @@
                         </select>
                         <span asp-validation-for="ContractType" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ContractDate" class="control-label">Müqavilə Tarixi</label>
-                        <input asp-for="ContractDate" class="form-control" />
-                        <span asp-validation-for="ContractDate" class="text-danger"></span>
-                    </div>
+                    
                     <div class="form-group">
                         <label asp-for="Value" class="control-label">Ödəmə Miqdarı</label>
                         <input asp-for="Value" class="form-control" />

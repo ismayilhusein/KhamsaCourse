@@ -8,7 +8,7 @@
 <h5>@ViewData["DateFrom"] və @ViewData["DateTo"] aralığındakı imtahanların siyahısı</h5>
 
 <p>
-    <a asp-action="Create" asp-route-id="@ViewContext.HttpContext.Request.RouteValues["id"]">Yeni İmtahan</a>
+    <a class="btn btn-primary" asp-action="Create" asp-route-id="@ViewContext.HttpContext.Request.RouteValues["id"]">Yeni İmtahan</a>
 </p>
 <form asp-action="Index" asp-controller="Exam" asp-area="Admin" method="get">
     <div class="row">
@@ -29,7 +29,7 @@
     </div>
 </form>
 <table class="table">
-    <thead>
+    <thead style="background-color:cornflowerblue;color:white">
         <tr>
             <th>
                Ad
@@ -62,8 +62,8 @@
                 @Html.DisplayFor(modelItem => item.ExamDate)
             </td>
             <td>
-                @Html.ActionLink("Düzəliş", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Sil", "Delete", new { id = item.Id })
+                <a asp-action="Edit" asp-controller="Exam" asp-area="Admin" asp-route-id="@item.Id" title="Duzəliş et"><img src="~/admin/img/edit3.png" width="20px" alt="Duzelis" /></a> |
+                <a asp-action="Delete" asp-controller="Exam" asp-area="Admin" asp-route-id="@item.Id" title="Sil"><img src="~/admin/img/delete2.png" width="20px" alt="Sil" /></a>
             </td>
         </tr>
 }

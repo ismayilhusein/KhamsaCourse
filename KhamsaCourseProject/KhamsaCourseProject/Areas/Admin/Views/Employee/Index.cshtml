@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <table class="table">
-                    <thead>
+                    <thead style="background-color:cornflowerblue;color:white">
                         <tr>
                             <th scope="col">Ödəniş Tarixi</th>
                             <th scope="col">Dəyər</th>
@@ -56,7 +56,7 @@
 <h1>İşcilər</h1>
 
 <p>
-    <a asp-action="Create">Yeni İşci</a>
+    <a class="btn btn-primary" asp-action="Create">Yeni İşci</a>
 </p>
 <form asp-action="Index" asp-controller="Employee" asp-area="Admin" method="get">
     <div class="row">
@@ -124,7 +124,7 @@
         </div>
     </div>
 </form>
-<table class="table table-student">
+<table class="table table-student table-bordered">
     <thead>
         <tr>
             <th>
@@ -205,14 +205,14 @@
                     }
                     @if (item.IsActive == 1)
                     {
-                        <td>
-                            <a asp-action="Edit" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id">Düzəliş</a> |
-                            <a href="#" data-url="@Url.Action("Details","Employee",new { id = item.Id })" class="get-details">Detallar</a> |
-                            @Html.ActionLink("Sil", "Delete", new { id = item.Id }) |
-                            @Html.ActionLink("Ödəniş", "PayContract", new { id = item.Id }) |
-                            @Html.ActionLink("Alacaq", "CostContract", new { id = item.Id }) |
-                            <a asp-action="Deactivate" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id">Arxivlə</a>
-                        </td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id" title="Duzəliş et"><img src="~/admin/img/edit3.png" width="20px" alt="Duzelis" /></a>|
+                    <a href="#" data-url="@Url.Action("Details","Employee",new { id = item.Id })" class="get-details" title="Detallar"><img src="~/admin/img/info--v4.gif" width="20px" alt="Detallar" /></a> |
+                    <a asp-action="Delete" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id" title="Sil"><img src="~/admin/img/delete2.png" width="20px" alt="Sil" /></a>|
+                    <a asp-action="PayContract" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id" title="Ödəniş et"><img src="~/admin/img/payment.jpg" width="25px" alt="odenis" /></a> |
+                    <a asp-action="CostContract" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id" title="Alacağ"><img src="~/admin/img/moneyicon.png" width="25px" alt="Alacağ" /></a> |
+                    <a asp-action="Deactivate" asp-controller="Employee" asp-area="Admin" asp-route-id="@item.Id" title="Arxivlə"><img src="~/admin/img/archive.png" width="20px" alt="Arxivle" /></a>
+                </td>
                     }
                     else
                     {

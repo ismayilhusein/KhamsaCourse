@@ -160,7 +160,7 @@ namespace KhamsaCourseProject.Areas.Admin.Controllers
             decimal discount = (decimal)ExConverter.DiscountedValue(request.DiscountType, request.Value, request.Discount);
             StudentContract contract = new StudentContract
             {
-                ContractDate = request.ContractDate,
+                ContractDate = request.RegistrationDate,
                 ContractTypeId = request.ContractType,
                 Discount = request.Value - discount,
                 Value = discount,
